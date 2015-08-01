@@ -163,7 +163,7 @@ service 'libvirt-bin' do
   service_name platform_options['libvirt_service']
   supports status: true, restart: true
 
-  action [:enable, :start]
+  action [:enable]
 end
 
 execute 'Disabling default libvirt network' do
@@ -193,7 +193,7 @@ template '/etc/libvirt/libvirtd.conf' do
   not_if { platform_family? 'suse' }
 end
 
-template '/etc/default/libvirt-bin' do
+template "/etc/default/#{platform_options['libvirt_service']}" do
   source 'libvirt-bin.erb'
   owner 'root'
   group 'root'
@@ -204,7 +204,7 @@ template '/etc/default/libvirt-bin' do
   only_if { platform_family? 'debian' }
 end
 
-template '/etc/sysconfig/libvirtd' do
+template "/etc/sysconfig/#{platform_options['libvirt_service']}" do
   source 'libvirtd.erb'
   owner 'root'
   group 'root'
